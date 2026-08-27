@@ -1,33 +1,24 @@
 #include <iostream>
 
-#include "Router.h"
-#include "Link.h"
+#include "Network.h"
 
 using namespace std;
 
 int main() {
 
-    Router router1(1);
-    Router router2(2);
+    Network network;
 
-    Link link(1, 2, 5);
+    network.addRouter(1);
+    network.addRouter(2);
+    network.addRouter(3);
 
-    cout << "Router 1 ID: "
-         << router1.getId() << endl;
+    network.addLink(1, 2, 5);
+    network.addLink(2, 3, 3);
+    network.addLink(1, 3, 10);
 
-    cout << "Router 2 ID: "
-         << router2.getId() << endl;
+    cout << "Number of routers: "<< network.getRouters().size() << endl;
 
-    cout << "Link: "
-         << link.getRouter1()
-         << " <-> "
-         << link.getRouter2() << endl;
-
-    cout << "Cost: "
-         << link.getCost() << endl;
-
-    cout << "Link active: "
-         << link.isActive() << endl;
+    cout << "Number of links: "<< network.getLinks().size() << endl;
 
     return 0;
 }

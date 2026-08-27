@@ -1,4 +1,5 @@
 build/
+simulator
 *.o
 *.out
 .DS_Store

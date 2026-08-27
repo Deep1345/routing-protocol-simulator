@@ -7,4 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(simulator
     main.cpp
+    src/Router.cpp
 )
+
+target_include_directories(simulator PRIVATE include)

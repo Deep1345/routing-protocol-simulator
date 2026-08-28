@@ -1,19 +1,8 @@
 #pragma once
-
-#include <limits>
-
 struct RoutingEntry {
-
-    int destination;
     int nextHop;
     int cost;
-
-    RoutingEntry(
-        int destination,
-        int nextHop,
-        int cost
-    )
-        : destination(destination),
-          nextHop(nextHop),
+    RoutingEntry(int nextHop, int cost)
+        : nextHop(nextHop),
           cost(cost) {}
 };

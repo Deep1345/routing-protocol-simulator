@@ -33,4 +33,6 @@ The caller isn't allowed to modify the map through this function.
     const unordered_map<int, vector<Neighbor>>& getAdjacencyList() const;
     // getter function for dijkstrato access this graph
     const vector<Neighbor>& getNeighbors(int routerId) const;
+    Router& getRouter(int id);
+    const Router& getRouter(int id) const;
 };

@@ -10,6 +10,7 @@ add_executable(simulator
     src/Router.cpp
     src/Link.cpp
     src/Network.cpp
+    src/RoutingTable.cpp
 )
 
 target_include_directories(simulator PRIVATE include)

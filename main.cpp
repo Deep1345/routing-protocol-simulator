@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "Network.h"
 
 using namespace std;
@@ -10,28 +11,21 @@ int main() {
     network.addRouter(1);
     network.addRouter(2);
     network.addRouter(3);
-    network.addRouter(4);
 
     network.addLink(1, 2, 5);
     network.addLink(1, 3, 2);
-    network.addLink(2, 4, 3);
 
-    const auto& graph = network.getAdjacencyList();
+    Router& router1 = network.getRouter(1);
 
-    for (const auto& [routerId, neighbors] : graph) {
+    router1.getRoutingTable().addEntry(1, 1, 0);
+    router1.getRoutingTable().addEntry(2, 2, 5);
+    router1.getRoutingTable().addEntry(3, 3, 2);
 
-        cout << "Router " << routerId << ": ";
+    cout << "Routing Table for Router "
+         << router1.getId()
+         << endl;
 
-        for (const Neighbor& neighbor : neighbors) {
+    router1.getRoutingTable().printTable();
 
-            cout << "("
-                 << neighbor.routerId
-                 << ", cost=" 
-                 << neighbor.cost
-                 << ") ";
-        }
-
-        cout << endl;
-    }
     return 0;
 }

@@ -71,3 +71,12 @@ const vector<Neighbor>& Network::getNeighbors(int routerId) const {
 
     return adjacencyList.at(routerId); // at checks that the key exists ??
 }
+Router& Network::getRouter(int id) {
+
+    return routers.at(id);
+}
+
+const Router& Network::getRouter(int id) const {
+
+    return routers.at(id);
+}

@@ -1,14 +1,26 @@
 #include "Router.h"
 
-Router::Router(int id) {
-    this->id = id;
-    this->active = true;
+Router::Router(int id)
+    : id(id),
+      active(true) {
 }
 
 int Router::getId() const {
+
     return id;
 }
 
 bool Router::isActive() const {
+
     return active;
+}
+
+RoutingTable& Router::getRoutingTable() {
+
+    return routingTable;
+}
+
+const RoutingTable& Router::getRoutingTable() const {
+
+    return routingTable;
 }

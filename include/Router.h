@@ -8,6 +8,7 @@ private: // here ID and active is private because we dont want other functions c
     bool active;
     RoutingTable routingTable;
     LinkStateDatabase linkStateDatabase;
+    int lsaSequenceNumber;
 public:
     Router(int id);
     int getId() const; // const means This function promises not to modify the Router object.
@@ -16,4 +17,5 @@ public:
     const RoutingTable& getRoutingTable() const;
     LinkStateDatabase& getLinkStateDatabase();
     const LinkStateDatabase& getLinkStateDatabase() const;   
+    int getNextLSASequenceNumber();
 };       

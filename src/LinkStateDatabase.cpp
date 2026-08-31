@@ -1,14 +1,29 @@
 #include "LinkStateDatabase.h"
 
-void LinkStateDatabase::addLSA(const LinkStateAdvertisement& lsa) {
+bool LinkStateDatabase::addLSA(
+    const LinkStateAdvertisement& lsa) {
+
     auto it = lsas.find(lsa.routerId);
 
-    if (it != lsas.end()) {
-        it->second = lsa;
-    }
-    else {
+    // No LSA from this router yet
+    if (it == lsas.end()) {
+
         lsas.emplace(lsa.routerId, lsa);
+
+        return true;
     }
+
+    // Incoming LSA is newer
+    if (lsa.sequenceNumber >
+        it->second.sequenceNumber) {
+
+        it->second = lsa;
+
+        return true;
+    }
+
+    // Incoming LSA is old or duplicate
+    return false;
 }
 
 bool LinkStateDatabase::hasLSA(int routerId) const {

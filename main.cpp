@@ -9,13 +9,17 @@ int main() {
 
     Network network;
 
-    // Add routers 1 to 12
+    // -------------------------------------------------
+    // Create Routers
+    // -------------------------------------------------
+
     for (int i = 1; i <= 12; i++) {
         network.addRouter(i);
     }
 
+
     // -------------------------------------------------
-    // Complex topology
+    // Create Network Topology
     // -------------------------------------------------
 
     network.addLink(1, 2, 4);
@@ -51,50 +55,88 @@ int main() {
     network.addLink(9, 11, 3);
 
     network.addLink(10, 12, 4);
-
     network.addLink(11, 12, 1);
 
 
     // -------------------------------------------------
-    // Generate LSA for Router 1
+    // STEP 1
+    // Every router generates its own LSA
     // -------------------------------------------------
 
     generateAllLSAs(network);
 
 
     // -------------------------------------------------
-    // Print Router 1's LSA
+    // STEP 2
+    // Flood every LSA through the network
     // -------------------------------------------------
 
-    const LinkStateAdvertisement* lsa =
-        network.getRouter(1)
-               .getLinkStateDatabase()
-               .getLSA(1);
+    floodAllLSAs(network);
 
-    if (lsa == nullptr) {
 
-        cout << "LSA not found!" << endl;
-        return 1;
-    }
+    // -------------------------------------------------
+    // STEP 3
+    // Verify LSDB
+    // -------------------------------------------------
 
     cout << "\n========================================\n";
-    cout << "Link-State Advertisement for Router 1\n";
+    cout << "LINK-STATE DATABASE VERIFICATION\n";
     cout << "========================================\n";
 
-    cout << "Router ID: "
-         << lsa->routerId
-         << "\n\n";
+    for (const auto& [routerId, router] :
+         network.getRouters()) {
 
-    cout << "Neighbors:\n";
+        const auto& lsas =
+            router.getLinkStateDatabase()
+                  .getAllLSAs();
 
-    for (const auto& neighbor : lsa->neighbors) {
+        cout << "\nRouter " << routerId
+             << " has "
+             << lsas.size()
+             << " LSAs\n";
 
-        cout << "Router "
-             << neighbor.first
-             << " -> Cost "
-             << neighbor.second
-             << endl;
+        for (const auto& [lsaRouterId, lsa] : lsas) {
+
+            cout << "  LSA from Router "
+                 << lsaRouterId
+                 << " | Sequence: "
+                 << lsa.sequenceNumber
+                 << "\n";
+        }
     }
+
+
+    // -------------------------------------------------
+    // STEP 4
+    // Build routing tables from LSDB
+    // -------------------------------------------------
+
+    buildAllRoutingTables(network);
+
+
+    // -------------------------------------------------
+    // STEP 5
+    // Print routing tables
+    // -------------------------------------------------
+
+    cout << "\n\n========================================\n";
+    cout << "LINK-STATE ROUTING TABLES\n";
+    cout << "========================================\n";
+
+    for (const auto& [routerId, router] :
+         network.getRouters()) {
+
+        cout << "\n----------------------------------------\n";
+        cout << "Routing Table for Router "
+             << routerId
+             << "\n";
+        cout << "----------------------------------------\n";
+
+        network.getRouter(routerId)
+               .getRoutingTable()
+               .printTable();
+    }
+
 
     return 0;
 }

@@ -1,17 +1,32 @@
-#ifndef LINK_STATE_ADVERTISEMENT_H
-#define LINK_STATE_ADVERTISEMENT_H
+#pragma once
 
 #include <vector>
+
 using namespace std;
+
 struct LinkStateAdvertisement {
+
     int routerId;
+
+    int sequenceNumber;
+
     vector<pair<int, int>> neighbors;
 
-    LinkStateAdvertisement(int routerId) : routerId(routerId) {}
+
+    LinkStateAdvertisement(
+        int routerId,
+        int sequenceNumber
+    )
+        : routerId(routerId),
+          sequenceNumber(sequenceNumber) {
+    }
+
 
     void addNeighbor(int neighborId, int cost) {
-        neighbors.push_back({neighborId, cost});
+
+        neighbors.push_back({
+            neighborId,
+            cost
+        });
     }
 };
-
-#endif

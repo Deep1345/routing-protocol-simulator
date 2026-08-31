@@ -2,9 +2,9 @@
 
 Router::Router(int id)
     : id(id),
-      active(true) {
+      active(true),
+      lsaSequenceNumber(0) {
 }
-
 int Router::getId() const {
 
     return id;
@@ -30,4 +30,10 @@ LinkStateDatabase& Router::getLinkStateDatabase() {
 
 const LinkStateDatabase& Router::getLinkStateDatabase() const {
     return linkStateDatabase;
+}
+int Router::getNextLSASequenceNumber() {
+
+    lsaSequenceNumber++;
+
+    return lsaSequenceNumber;
 }

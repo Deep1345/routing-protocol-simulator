@@ -11,7 +11,7 @@ private:
     unordered_map<int, LinkStateAdvertisement> lsas;
 
 public:
-    void addLSA(const LinkStateAdvertisement& lsa);
+    bool addLSA(const LinkStateAdvertisement& lsa);
 
     bool hasLSA(int routerId) const;
 

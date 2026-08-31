@@ -1,17 +1,23 @@
 #include "Dijkstra.h"
+
 #include <queue>
 #include <limits>
 
 using namespace std;
 
-DijkstraResult runDijkstra(const Network& network, int source) {
+DijkstraResult runDijkstra(
+    const unordered_map<int, vector<Neighbor>>& topology,
+    int source) {
 
     DijkstraResult result;
 
     const int INF = numeric_limits<int>::max();
 
+    // -------------------------------------------------
     // Step 1: Initialize distances
-    for (const auto& [routerId, router] : network.getRouters()) {
+    // -------------------------------------------------
+
+    for (const auto& [routerId, neighbors] : topology) {
 
         result.distance[routerId] = INF;
     }
@@ -21,33 +27,56 @@ DijkstraResult runDijkstra(const Network& network, int source) {
 
     // Min-heap:
     // pair<distance, routerId>
-    priority_queue<pair<int, int>,vector<pair<int, int>>,greater<pair<int, int>>> pq;
+    priority_queue<
+        pair<int, int>,
+        vector<pair<int, int>>,
+        greater<pair<int, int>>
+    > pq;
+
     pq.push({0, source});
 
+
+    // -------------------------------------------------
     // Step 2: Dijkstra
+    // -------------------------------------------------
+
     while (!pq.empty()) {
-        auto [currentDistance, currentRouter] = pq.top();
+
+        auto [currentDistance, currentRouter] =
+            pq.top();
+
         pq.pop();
+
+
         // Ignore outdated priority queue entry
-        if (currentDistance != result.distance[currentRouter]) {
+        if (currentDistance !=
+            result.distance[currentRouter]) {
+
             continue;
         }
+
+
         // Look at all neighbors
         for (const Neighbor& neighbor :
-             network.getNeighbors(currentRouter)) {
+             topology.at(currentRouter)) {
 
             int nextRouter = neighbor.routerId;
+
             int edgeCost = neighbor.cost;
 
             int newDistance =
                 currentDistance + edgeCost;
 
+
             // Relaxation
-            if (newDistance < result.distance[nextRouter]) {
+            if (newDistance <
+                result.distance[nextRouter]) {
 
-                result.distance[nextRouter] = newDistance;
+                result.distance[nextRouter] =
+                    newDistance;
 
-                result.parent[nextRouter] = currentRouter;
+                result.parent[nextRouter] =
+                    currentRouter;
 
                 pq.push({
                     newDistance,
@@ -56,5 +85,6 @@ DijkstraResult runDijkstra(const Network& network, int source) {
             }
         }
     }
+
     return result;
 }

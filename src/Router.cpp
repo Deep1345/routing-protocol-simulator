@@ -24,3 +24,10 @@ const RoutingTable& Router::getRoutingTable() const {
 
     return routingTable;
 }
+LinkStateDatabase& Router::getLinkStateDatabase() {
+    return linkStateDatabase;
+}
+
+const LinkStateDatabase& Router::getLinkStateDatabase() const {
+    return linkStateDatabase;
+}

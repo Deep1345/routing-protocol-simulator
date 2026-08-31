@@ -56,27 +56,44 @@ int main() {
 
 
     // -------------------------------------------------
-    // Build routing tables for all routers
+    // Generate LSA for Router 1
     // -------------------------------------------------
 
-    buildAllRoutingTables(network);
+    generateAllLSAs(network);
 
 
     // -------------------------------------------------
-    // Print all routing tables
+    // Print Router 1's LSA
     // -------------------------------------------------
 
-    for (const auto& [routerId, router] : network.getRouters()) {
+    const LinkStateAdvertisement* lsa =
+        network.getRouter(1)
+               .getLinkStateDatabase()
+               .getLSA(1);
 
-        cout << "\n========================================\n";
-        cout << "Routing Table for Router "
-             << routerId
-             << "\n";
-        cout << "========================================\n";
+    if (lsa == nullptr) {
 
-        network.getRouter(routerId)
-               .getRoutingTable()
-               .printTable();
+        cout << "LSA not found!" << endl;
+        return 1;
+    }
+
+    cout << "\n========================================\n";
+    cout << "Link-State Advertisement for Router 1\n";
+    cout << "========================================\n";
+
+    cout << "Router ID: "
+         << lsa->routerId
+         << "\n\n";
+
+    cout << "Neighbors:\n";
+
+    for (const auto& neighbor : lsa->neighbors) {
+
+        cout << "Router "
+             << neighbor.first
+             << " -> Cost "
+             << neighbor.second
+             << endl;
     }
 
     return 0;

@@ -2,6 +2,32 @@
 #include "Dijkstra.h"
 #include <limits>
 using namespace std;
+void generateLSA(Network& network, int routerId) {
+
+    LinkStateAdvertisement lsa(routerId);
+
+    const vector<Neighbor>& neighbors =
+        network.getNeighbors(routerId);
+
+    for (const Neighbor& neighbor : neighbors) {
+
+        lsa.addNeighbor(
+            neighbor.routerId,
+            neighbor.cost
+        );
+    }
+
+    Router& router = network.getRouter(routerId);
+
+    router.getLinkStateDatabase().addLSA(lsa);
+}
+void generateAllLSAs(Network& network) {
+
+    for (const auto& [routerId, router] : network.getRouters()) {
+
+        generateLSA(network, routerId);
+    }
+}
 
 void buildAllRoutingTables(Network& network) {
 

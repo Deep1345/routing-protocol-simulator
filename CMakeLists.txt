@@ -13,6 +13,7 @@ add_executable(simulator
     src/RoutingTable.cpp
     src/Dijkstra.cpp
     src/RoutingManager.cpp
+    src/LinkStateDatabase.cpp
 )
 
 target_include_directories(simulator PRIVATE include)

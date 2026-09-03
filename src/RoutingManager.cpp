@@ -105,7 +105,9 @@ buildTopologyFromLSDB(const Router& router) {
         topology[routerId];
 
         for (const auto& [neighborId, cost] : lsa.neighbors) {
-
+            // Make sure the neighbor also exists
+            // as a router in the topology.
+            topology[neighborId];
             topology[routerId].emplace_back(
                 neighborId,
                 cost
@@ -168,17 +170,28 @@ void buildRoutingTable(Network& network, int source) {
 
             continue;
         }
-
         // Find the first hop
         int current = destination;
+        int nextHop = destination;
 
-        while (result.parent.at(current) != source) {
+        while (current != source) {
 
-            current =
-                result.parent.at(current);
+            auto parentIt = result.parent.find(current);
+
+            // No parent means no valid path
+            if (parentIt == result.parent.end()) {
+                nextHop = -1;
+                break;
+            }
+
+            if (parentIt->second == source) {
+                nextHop = current;
+                break;
+            }
+
+            current = parentIt->second;
         }
 
-        int nextHop = current;
 
         router.getRoutingTable().addEntry(
             destination,
